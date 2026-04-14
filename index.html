@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Collin Williams</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --dark-bg: #0d0f14;
+      --card-bg: #161a23;
+      --border: #2a2f3e;
+      --accent: #c9a84c;
+      --accent-soft: rgba(201,168,76,0.12);
+      --text: #e8e8ec;
+      --muted: #7a7f94;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: rgba(13,15,20,0.92) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      color: var(--accent) !important;
+      font-size: 1.35rem;
+      letter-spacing: .03em;
+    }
+    .nav-link {
+      color: var(--muted) !important;
+      font-size: .88rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-link:hover { color: var(--accent) !important; }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 50%, rgba(201,168,76,.08) 0%, transparent 70%),
+        var(--dark-bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-label {
+      font-size: .78rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .9rem;
+    }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 1.08;
+      color: #fff;
+    }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-top: 1.2rem;
+    }
+    .btn-gold {
+      background: var(--accent);
+      color: #0d0f14;
+      border: none;
+      padding: .65rem 1.8rem;
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: opacity .2s;
+    }
+    .btn-gold:hover { opacity: .85; color: #0d0f14; }
+    .btn-outline-gold {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: .65rem 1.8rem;
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all .2s;
+    }
+    .btn-outline-gold:hover { background: var(--accent-soft); color: var(--accent); }
+
+    /* ── Section titles ── */
+    .section-label {
+      font-size: .72rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .5rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: #fff;
+      margin-bottom: 2.5rem;
+    }
+    section { padding: 90px 0; }
+
+    /* ── Cards ── */
+    .card-dark {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.8rem;
+      height: 100%;
+      transition: border-color .25s, transform .25s;
+    }
+    .card-dark:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .card-title-sm {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: .4rem;
+    }
+    .card-body-text {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── Timeline (Experience) ── */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+    .timeline-item { position: relative; margin-bottom: 2.4rem; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--dark-bg);
+    }
+    .timeline-date {
+      font-size: .75rem;
+      letter-spacing: .1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: .3rem;
+    }
+    .timeline-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: .15rem;
+    }
+    .timeline-org {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-bottom: .6rem;
+    }
+    .timeline-desc {
+      font-size: .87rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .timeline-desc li { margin-bottom: .25rem; }
+
+    /* ── Skills ── */
+    .skill-pill {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(201,168,76,.25);
+      border-radius: 3px;
+      padding: .32rem .85rem;
+      font-size: .8rem;
+      letter-spacing: .05em;
+      margin: .25rem;
+    }
+
+    /* ── Education card ── */
+    .edu-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── Divider ── */
+    hr.gold { border-color: var(--border); }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      font-size: .84rem;
+      color: var(--muted);
+    }
+    .social-link {
+      color: var(--muted);
+      font-size: 1.2rem;
+      margin: 0 .5rem;
+      transition: color .2s;
+    }
+    .social-link:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">Collin Williams</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-lg-2">
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+        <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
+        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+        <li class="nav-item"><a class="nav-link" href="#activities">Activities</a></li>
+        <li class="nav-item"><a class="nav-link" href="piano.html">🎹 Piano Page</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <p class="hero-label">Portfolio &amp; Résumé</p>
+        <h1 class="hero-name">Collin Micah<br>Williams</h1>
+        <p class="hero-sub">
+          Motivated BYU student, returned missionary, and team-oriented
+          professional with a passion for leadership, service, and continuous
+          growth.
+        </p>
+        <div class="d-flex gap-3 mt-4 flex-wrap">
+          <a href="#experience" class="btn btn-gold">View Résumé</a>
+          <a href="piano.html" class="btn btn-outline-gold">Piano Page</a>
+        </div>
+      </div>
+      <div class="col-lg-5 d-none d-lg-flex justify-content-end">
+        <img
+            src="portrait.jpg"
+            alt="Collin Williams"
+            style="width:260px; height:260px; object-fit:cover; object-position: center top; border-radius:50%; border:2px solid rgba(201,168,76,.25);"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<section id="about" style="background:var(--card-bg); border-bottom:1px solid var(--border);">
+  <div class="container">
+    <p class="section-label">About Me</p>
+    <h2 class="section-title">Who I Am</h2>
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <p style="color:var(--muted);line-height:1.8;font-size:.95rem;">
+          I am a recently returned missionary for The Church of Jesus Christ of Latter-day Saints,
+          currently enrolled as a full-time student at Brigham Young University (15 credits).
+          I'm a motivated, dependable individual who thrives in team-based environments.
+          I enjoy staying active, organizing and leading, learning new skills, and working with others.
+        </p>
+        <p style="color:var(--muted);line-height:1.8;font-size:.95rem;margin-top:1rem;">
+          During my two-year mission in Recife, Brazil, I served in all leadership roles within the
+          mission field, learned to speak Portuguese fluently, and developed strong communication,
+          organizational, and leadership skills. I'm now channeling that experience into my academic
+          and professional pursuits.
+        </p>
+      </div>
+      <div class="col-lg-5">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="card-dark text-center">
+              <div class="card-icon mx-auto"><i class="bi bi-mortarboard"></i></div>
+              <p class="card-title-sm">BYU Student</p>
+              <p class="card-body-text">15 credits enrolled</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-dark text-center">
+              <div class="card-icon mx-auto"><i class="bi bi-globe-americas"></i></div>
+              <p class="card-title-sm">Bilingual</p>
+              <p class="card-body-text">English &amp; Portuguese</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-dark text-center">
+              <div class="card-icon mx-auto"><i class="bi bi-trophy"></i></div>
+              <p class="card-title-sm">Top 10 Graduate</p>
+              <p class="card-body-text">4.0 GPA, Honors</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-dark text-center">
+              <div class="card-icon mx-auto"><i class="bi bi-music-note-beamed"></i></div>
+              <p class="card-title-sm">Pianist</p>
+              <p class="card-body-text">10+ years of lessons</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ EXPERIENCE ═══════════ -->
+<section id="experience">
+  <div class="container">
+    <p class="section-label">Work History</p>
+    <h2 class="section-title">Experience</h2>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <p class="timeline-date">2026 – Present</p>
+        <p class="timeline-title">Guest House Assistant</p>
+        <p class="timeline-org">BYU Guest House &amp; Conference Center — Provo, UT</p>
+        <ul class="timeline-desc">
+          <li>Assist guests with check-in/check-out and general inquiries</li>
+          <li>Maintain a welcoming and professional front-desk environment</li>
+          <li>Coordinate with housekeeping and management to ensure guest satisfaction</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <p class="timeline-date">Nov 2023 – Dec 2025</p>
+        <p class="timeline-title">Full-Time Missionary</p>
+        <p class="timeline-org">The Church of Jesus Christ of Latter-day Saints — Recife, Brazil</p>
+        <ul class="timeline-desc">
+          <li>Served in all leadership roles within the mission field over two years</li>
+          <li>Planned schedules, set goals, and trained fellow missionaries</li>
+          <li>Developed fluent Portuguese and cross-cultural communication skills</li>
+          <li>Strengthened organization, leadership, and interpersonal abilities</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <p class="timeline-date">Jan 2023 – Nov 2023</p>
+        <p class="timeline-title">Team Member</p>
+        <p class="timeline-org">Chick-fil-A — Las Cruces, NM</p>
+        <ul class="timeline-desc">
+          <li>Provided fast and friendly customer service in a high-volume environment</li>
+          <li>Collaborated effectively within a fast-paced team setting</li>
+          <li>Developed time management and professional communication skills</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <p class="timeline-date">Various</p>
+        <p class="timeline-title">Farmhand</p>
+        <p class="timeline-org">Family-Owned Hay Farm — Deming, NM</p>
+        <ul class="timeline-desc">
+          <li>Assisted with harvesting, equipment maintenance, and daily farm operations</li>
+          <li>Built a strong work ethic through consistent hands-on physical labor</li>
+          <li>Worked independently and as part of a team to complete seasonal tasks</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <p class="timeline-date">Various</p>
+        <p class="timeline-title">Participant</p>
+        <p class="timeline-org">State Police Explorers Program — Las Cruces, NM</p>
+        <ul class="timeline-desc">
+          <li>Completed leadership training and community service initiatives</li>
+          <li>Practiced discipline, teamwork, and accountability within a structured program</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ EDUCATION ═══════════ -->
+<section id="education" style="background:var(--card-bg); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="container">
+    <p class="section-label">Academic Background</p>
+    <h2 class="section-title">Education</h2>
+
+    <div class="edu-card">
+      <div class="d-flex justify-content-between flex-wrap gap-2">
+        <div>
+          <p class="timeline-title" style="font-size:1.1rem;">Brigham Young University</p>
+          <p class="timeline-org">Provo, UT — Currently Enrolled (15 Credits)</p>
+        </div>
+        <span class="skill-pill" style="height:fit-content;">2026 – Present</span>
+      </div>
+      <p class="card-body-text mt-2">Pursuing a bachelor's degree while building on skills developed during missionary service, including leadership, communication, and organizational excellence.</p>
+    </div>
+
+    <div class="edu-card">
+      <div class="d-flex justify-content-between flex-wrap gap-2">
+        <div>
+          <p class="timeline-title" style="font-size:1.1rem;">Organ Mountain High School</p>
+          <p class="timeline-org">Las Cruces, NM — Graduate with Honors</p>
+        </div>
+        <span class="skill-pill" style="height:fit-content;">Aug 2019 – May 2023</span>
+      </div>
+      <ul class="card-body-text mt-2" style="padding-left:1.2rem;">
+        <li>4.0 GPA throughout high school career</li>
+        <li>Top 10 Graduate of graduating class</li>
+        <li>Lettered in multiple varsity sports</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SKILLS ═══════════ -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label">Competencies</p>
+    <h2 class="section-title">Skills</h2>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="card-dark">
+          <div class="card-icon"><i class="bi bi-people"></i></div>
+          <p class="card-title-sm">Leadership</p>
+          <p class="card-body-text">Led in church callings, school student council (Junior Class VP), missionary field leadership roles, and as Cross Country Team Captain.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-dark">
+          <div class="card-icon"><i class="bi bi-chat-dots"></i></div>
+          <p class="card-title-sm">Communication</p>
+          <p class="card-body-text">Developed strong verbal and written communication through missionary work, student council, and customer-facing roles.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-dark">
+          <div class="card-icon"><i class="bi bi-calendar-check"></i></div>
+          <p class="card-title-sm">Organization &amp; Time Mgmt</p>
+          <p class="card-body-text">Skilled at planning and organizing schedules, goals, and priorities — developed through mission leadership and student life.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-dark">
+          <div class="card-icon"><i class="bi bi-globe-americas"></i></div>
+          <p class="card-title-sm">Portuguese (Fluent)</p>
+          <p class="card-body-text">Learned to fluently speak Portuguese to communicate with the people of Recife, Brazil during two years of full-time service.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-dark">
+          <div class="card-icon"><i class="bi bi-music-note-list"></i></div>
+          <p class="card-title-sm">Piano</p>
+          <p class="card-body-text">10 years of lessons with recitals and performances. A skill that demonstrates discipline, practice, and creative expression.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-dark">
+          <div class="card-icon"><i class="bi bi-arrow-repeat"></i></div>
+          <p class="card-title-sm">Adaptability</p>
+          <p class="card-body-text">Moved to Brazil and adapted to a completely different culture, climate, and lifestyle — thrives in new and challenging environments.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ACTIVITIES & ACHIEVEMENTS ═══════════ -->
+<section id="activities" style="background:var(--card-bg); border-top:1px solid var(--border);">
+  <div class="container">
+    <p class="section-label">Involvement &amp; Honors</p>
+    <h2 class="section-title">Activities &amp; Achievements</h2>
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <h5 style="color:#fff;font-size:1rem;font-weight:500;margin-bottom:1rem;">Activities &amp; Involvement</h5>
+        <div>
+          <span class="skill-pill"><i class="bi bi-person-badge me-1"></i>Student Council – Jr. Class VP</span>
+          <span class="skill-pill"><i class="bi bi-trophy me-1"></i>Varsity Cross Country (Captain)</span>
+          <span class="skill-pill"><i class="bi bi-trophy me-1"></i>Varsity Track &amp; Field</span>
+          <span class="skill-pill"><i class="bi bi-trophy me-1"></i>Varsity Tennis</span>
+          <span class="skill-pill"><i class="bi bi-trophy me-1"></i>Varsity Men's Volleyball</span>
+          <span class="skill-pill"><i class="bi bi-heart me-1"></i>Best Buddies Program</span>
+          <span class="skill-pill"><i class="bi bi-music-note me-1"></i>Band, Choir &amp; A Cappella</span>
+          <span class="skill-pill"><i class="bi bi-activity me-1"></i>Weightlifting</span>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <h5 style="color:#fff;font-size:1rem;font-weight:500;margin-bottom:1rem;">Achievements &amp; Honors</h5>
+        <div class="d-flex flex-column gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-star-fill" style="color:var(--accent);font-size:.8rem;"></i>
+            <span style="color:var(--muted);font-size:.9rem;">Cross Country Team Captain</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-star-fill" style="color:var(--accent);font-size:.8rem;"></i>
+            <span style="color:var(--muted);font-size:.9rem;">Top 10 High School Graduate</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-star-fill" style="color:var(--accent);font-size:.8rem;"></i>
+            <span style="color:var(--muted);font-size:.9rem;">4.0 GPA — Graduated with Honors</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-star-fill" style="color:var(--accent);font-size:.8rem;"></i>
+            <span style="color:var(--muted);font-size:.9rem;">Varsity letters in all sports participated</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-star-fill" style="color:var(--accent);font-size:.8rem;"></i>
+            <span style="color:var(--muted);font-size:.9rem;">All missionary field leadership roles served</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+    <p class="mb-0">© 2025 Collin Micah Williams</p>
+    <div>
+      <a href="mailto:collinwilliams075@gmail.com" class="social-link" title="Email"><i class="bi bi-envelope"></i></a>
+      <a href="https://linkedin.com" class="social-link" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+      <a href="https://github.com" class="social-link" title="GitHub"><i class="bi bi-github"></i></a>
+    </div>
+    <p class="mb-0"><a href="piano.html" style="color:var(--accent);text-decoration:none;">🎹 Piano Page →</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
