@@ -1,0 +1,251 @@
+
+<h2 class="sr-only">Piano melody game — listen to a famous melody and repeat it by clicking the correct keys in order.</h2>
+
+<style>
+  .wrap { padding: 1.5rem 0; max-width: 620px; margin: 0 auto; font-family: var(--font-sans); }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .song-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+  .score-lbl { font-size: 13px; color: var(--color-text-secondary); }
+  .score-val { font-weight: 500; color: var(--color-text-primary); }
+  .progress-row { display: flex; gap: 4px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .note-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--color-border-secondary); transition: background 0.2s; }
+  .note-dot.done { background: #1D9E75; }
+  .note-dot.next { background: #378ADD; }
+  .note-dot.wrong { background: #E24B4A; }
+  .message { font-size: 14px; color: var(--color-text-secondary); text-align: center; min-height: 20px; margin-bottom: 1rem; }
+  .piano { display: flex; justify-content: center; position: relative; height: 150px; margin-bottom: 1.5rem; user-select: none; }
+  .wk {
+    width: 42px; height: 138px; background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-primary); border-radius: 0 0 4px 4px;
+    cursor: pointer; position: relative; margin: 0 1px;
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px;
+    font-size: 11px; color: var(--color-text-tertiary); transition: background 0.08s; flex-shrink: 0;
+  }
+  .wk.active { background: #B5D4F4; }
+  .wk.correct { background: #C0DD97; }
+  .wk.wrong-flash { background: #F7C1C1; }
+  .btn-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .song-select { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 1.2rem; }
+  .song-btn { font-size: 12px; padding: 4px 10px; border-radius: var(--border-radius-md); cursor: pointer; }
+  .song-btn.active-song { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+  .hint-text { font-size: 12px; color: var(--color-text-tertiary); text-align: center; margin-top: 0.5rem; }
+</style>
+
+<div class="wrap">
+
+  <div class="top-bar">
+    <span class="song-title" id="song-name">Choose a melody</span>
+    <span class="score-lbl">Score: <span class="score-val" id="score">0</span></span>
+  </div>
+
+  <div class="song-select" id="song-select"></div>
+  <div class="progress-row" id="progress-row"></div>
+  <div class="message" id="message">Pick a song and press Play!</div>
+
+  <div class="piano" id="piano">
+    <div class="wk" data-note="C4">C</div>
+    <div class="wk" data-note="D4">D</div>
+    <div class="wk" data-note="E4">E</div>
+    <div class="wk" data-note="F4">F</div>
+    <div class="wk" data-note="G4">G</div>
+    <div class="wk" data-note="A4">A</div>
+    <div class="wk" data-note="B4">B</div>
+    <div class="wk" data-note="C5">C5</div>
+    <div class="wk" data-note="D5">D5</div>
+    <div class="wk" data-note="E5">E5</div>
+    <div class="wk" data-note="G5">G5</div>
+  </div>
+
+  <div class="btn-row">
+    <button id="play-btn">Play melody</button>
+    <button id="replay-btn" disabled>Replay</button>
+    <button id="next-btn" disabled>Next song</button>
+  </div>
+  <p class="hint-text" id="hint-text"></p>
+</div>
+
+<script>
+const FREQS = {
+  C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392, A4:440, B4:493.88,
+  C5:523.25, D5:587.33, E5:659.25, G5:784
+};
+
+const SONGS = [
+  {
+    name: "Ode to Joy",
+    hint: "Beethoven's 9th Symphony",
+    notes: ["E4","E4","F4","G4","G4","F4","E4","D4","C4","C4","D4","E4","E4","D4","D4"]
+  },
+  {
+    name: "Mary Had a Little Lamb",
+    hint: "Classic nursery rhyme",
+    notes: ["E4","D4","C4","D4","E4","E4","E4","D4","D4","D4","E4","G4","G4"]
+  },
+  {
+    name: "Twinkle Twinkle",
+    hint: "A B C... you know this one",
+    notes: ["C4","C4","G4","G4","A4","A4","G4","F4","F4","E4","E4","D4","D4","C4"]
+  },
+  {
+    name: "Happy Birthday",
+    hint: "Sing along in your head!",
+    notes: ["C4","C4","D4","C4","F4","E4","C4","C4","D4","C4","G4","F4"]
+  },
+  {
+    name: "Jingle Bells",
+    hint: "Holiday classic",
+    notes: ["E4","E4","E4","E4","E4","E4","E4","G4","C4","D4","E4"]
+  },
+  {
+    name: "Fur Elise",
+    hint: "Beethoven again!",
+    notes: ["E5","D5","E5","D5","E5","B4","D5","C5","A4","C4","E4","A4","B4"]
+  },
+  {
+    name: "Hot Cross Buns",
+    hint: "Simple and satisfying",
+    notes: ["E4","D4","C4","E4","D4","C4","C4","C4","C4","C4","D4","D4","D4","D4","E4","D4","C4"]
+  },
+  {
+    name: "When the Saints",
+    hint: "Oh when the saints go marching in",
+    notes: ["C4","E4","F4","G4","C4","E4","F4","G4","C4","E4","F4","G4","E4","C4","E4","D4"]
+  }
+];
+
+const keys = Array.from(document.querySelectorAll('.wk'));
+let currentSong = null, playerInput = [], accepting = false, playing = false, score = 0;
+let audioCtx = null;
+
+function audio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playNote(note, dur = 0.4, vol = 0.35) {
+  const ctx = audio();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(FREQS[note] || 440, ctx.currentTime);
+  gain.gain.setValueAtTime(vol, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+  osc.start(); osc.stop(ctx.currentTime + dur);
+}
+
+function flash(note, cls, dur = 380) {
+  const k = keys.find(k => k.dataset.note === note);
+  if (!k) return;
+  k.classList.add(cls);
+  setTimeout(() => k.classList.remove(cls), dur);
+}
+
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+function setMsg(t) { document.getElementById('message').textContent = t; }
+
+function buildProgress(song, doneCount = 0, wrongIdx = -1) {
+  const row = document.getElementById('progress-row');
+  row.innerHTML = '';
+  song.notes.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'note-dot' + (i < doneCount ? ' done' : i === doneCount ? ' next' : '') + (i === wrongIdx ? ' wrong' : '');
+    row.appendChild(d);
+  });
+}
+
+function buildSongButtons() {
+  const container = document.getElementById('song-select');
+  container.innerHTML = '';
+  SONGS.forEach((s, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'song-btn';
+    btn.textContent = s.name;
+    btn.addEventListener('click', () => selectSong(i));
+    container.appendChild(btn);
+  });
+}
+
+function selectSong(idx) {
+  currentSong = SONGS[idx];
+  playerInput = []; accepting = false;
+  document.getElementById('song-name').textContent = currentSong.name;
+  document.getElementById('hint-text').textContent = currentSong.hint;
+  buildProgress(currentSong);
+  setMsg('Press Play to hear the melody!');
+  document.getElementById('play-btn').disabled = false;
+  document.getElementById('replay-btn').disabled = true;
+  document.getElementById('next-btn').disabled = true;
+  document.querySelectorAll('.song-btn').forEach((b, i) => {
+    b.classList.toggle('active-song', i === idx);
+  });
+}
+
+async function playMelody() {
+  if (!currentSong || playing) return;
+  playing = true; accepting = false;
+  playerInput = [];
+  buildProgress(currentSong);
+  document.getElementById('replay-btn').disabled = true;
+  setMsg('Listen carefully...');
+  await wait(400);
+  for (let i = 0; i < currentSong.notes.length; i++) {
+    const note = currentSong.notes[i];
+    playNote(note, 0.38);
+    flash(note, 'active', 380);
+    await wait(480);
+  }
+  playing = false; accepting = true;
+  document.getElementById('replay-btn').disabled = false;
+  setMsg('Now repeat it! (' + currentSong.notes.length + ' notes)');
+  buildProgress(currentSong, 0);
+}
+
+async function handlePress(note) {
+  if (!accepting || playing || !currentSong) return;
+  const pos = playerInput.length;
+  const expected = currentSong.notes[pos];
+
+  playNote(note, 0.28);
+
+  if (note !== expected) {
+    flash(note, 'wrong-flash', 500);
+    buildProgress(currentSong, pos, pos);
+    accepting = false;
+    await wait(300);
+    setMsg('Wrong note! The next note was ' + expected + '. Try again!');
+    await wait(800);
+    playerInput = [];
+    buildProgress(currentSong, 0);
+    accepting = true;
+    setMsg('Try again! (' + currentSong.notes.length + ' notes)');
+    return;
+  }
+
+  flash(note, 'correct', 320);
+  playerInput.push(note);
+  buildProgress(currentSong, playerInput.length);
+
+  if (playerInput.length === currentSong.notes.length) {
+    accepting = false;
+    score += 100;
+    document.getElementById('score').textContent = score;
+    await wait(300);
+    setMsg('You got it! Well done!');
+    document.getElementById('next-btn').disabled = false;
+    document.getElementById('replay-btn').disabled = true;
+  }
+}
+
+keys.forEach(k => k.addEventListener('click', () => handlePress(k.dataset.note)));
+document.getElementById('play-btn').addEventListener('click', playMelody);
+document.getElementById('replay-btn').addEventListener('click', playMelody);
+document.getElementById('next-btn').addEventListener('click', () => {
+  const currentIdx = SONGS.indexOf(currentSong);
+  const nextIdx = (currentIdx + 1) % SONGS.length;
+  selectSong(nextIdx);
+});
+
+buildSongButtons();
+setMsg('Pick a song and press Play!');
+</script>
